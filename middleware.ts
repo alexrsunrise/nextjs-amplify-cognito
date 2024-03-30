@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
   const isOnDashboard = request.nextUrl.pathname.startsWith('/dashboard');
   if (isOnDashboard) {
     if (isLoggedIn) return;
-    return NextResponse.redirect(new URL('/login', request.nextUrl));
+    return NextResponse.redirect(new URL('/auth/login', request.nextUrl));
   } else if (isLoggedIn) {
     return NextResponse.redirect(new URL('/dashboard', request.nextUrl));
   }

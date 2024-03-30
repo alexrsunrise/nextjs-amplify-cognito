@@ -9,7 +9,6 @@ export default function Welcome() {
     fetchUserAttributes()
       .then((data) => {
         setUsername(data.name);
-        console.log('userAttributes', data);
       })
       .catch((error) => console.log(error));
   }, []);

@@ -1,6 +1,11 @@
 import { redirect } from 'next/navigation';
 import { signUp, confirmSignUp, signIn, signOut } from 'aws-amplify/auth';
 
+enum UserType {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
@@ -27,18 +32,17 @@ export async function register(
       options: {
         userAttributes: {
           email: String(formData.get('email')),
-          name: 'Alex',
+          name: String(formData.get('name')),
+          'custom:type': UserType.USER,
         },
         // optional
-        autoSignIn: true, // or SignInOptions e.g { authFlowType: "USER_SRP_AUTH" }
+        autoSignIn: true,
       },
     });
   } catch (error: any) {
-    console.log(error);
     return error.message;
-    throw error;
   }
-  redirect('/confirm-signup');
+  redirect('/auth/confirm-signup');
 }
 
 export async function confirm(
@@ -54,7 +58,7 @@ export async function confirm(
     console.log(error);
     return error.message;
   }
-  redirect('/dashboard');
+  redirect('/auth/login');
 }
 
 export async function handleSignOut() {
@@ -63,5 +67,5 @@ export async function handleSignOut() {
   } catch (error: any) {
     console.log('error signing out: ', error);
   }
-  redirect('/login');
+  redirect('/auth/login');
 }
